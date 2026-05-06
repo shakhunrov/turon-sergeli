@@ -1,0 +1,109 @@
+.testimonials { background: linear-gradient(180deg, transparent 0%, rgba(124,58,237,0.04) 50%, transparent 100%); }
+
+.testimonial-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  max-width: 780px;
+  margin: 0 auto 32px;
+}
+
+.testimonial-card {
+  flex: 1;
+  padding: 48px 56px;
+  text-align: center;
+  background: linear-gradient(135deg, rgba(124,58,237,0.08), rgba(0,212,255,0.05));
+  position: relative;
+}
+
+.testi-quote-icon {
+  color: var(--accent-cyan);
+  opacity: 0.5;
+  margin: 0 auto 24px;
+}
+
+.testi-text {
+  font-size: 1.1rem;
+  color: var(--text-primary);
+  line-height: 1.8;
+  font-style: italic;
+  margin-bottom: 32px;
+}
+
+.testi-author {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  justify-content: center;
+}
+
+.testi-avatar {
+  width: 44px; height: 44px;
+  border-radius: 50%;
+  background: var(--grad-cyan);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-head);
+  font-weight: 700;
+  font-size: 18px;
+  color: #000;
+  flex-shrink: 0;
+}
+
+.testi-name {
+  font-family: var(--font-head);
+  font-weight: 600;
+  font-size: 15px;
+  color: var(--text-primary);
+  text-align: left;
+}
+
+.testi-role {
+  font-size: 13px;
+  color: var(--text-muted);
+  text-align: left;
+}
+
+.testi-nav {
+  width: 44px; height: 44px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255,255,255,0.06);
+  border: 1px solid var(--glass-border);
+  color: var(--text-secondary);
+  transition: all 0.2s ease;
+  flex-shrink: 0;
+}
+.testi-nav:hover {
+  background: rgba(0,212,255,0.12);
+  border-color: var(--accent-cyan);
+  color: var(--accent-cyan);
+}
+
+.testi-dots {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+}
+
+.testi-dot {
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  background: var(--glass-border);
+  transition: all 0.3s ease;
+}
+.testi-dot.active {
+  background: var(--accent-cyan);
+  width: 24px;
+  border-radius: 4px;
+  box-shadow: 0 0 8px rgba(0,212,255,0.5);
+}
+
+@media (max-width: 600px) {
+  .testimonial-card { padding: 32px 28px; }
+  .testi-text { font-size: 1rem; }
+  .testi-nav { display: none; }
+}

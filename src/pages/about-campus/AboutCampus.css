@@ -1,0 +1,107 @@
+/* Shared page hero */
+.page-hero {
+  padding: 80px 24px 60px;
+  background: linear-gradient(180deg, rgba(0,212,255,0.04) 0%, transparent 100%);
+  border-bottom: 1px solid var(--glass-border);
+  margin-bottom: 0;
+}
+
+.campus-hero { border-radius: 0; }
+
+/* Tabs */
+.campus-tabs {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 40px;
+  flex-wrap: wrap;
+}
+
+.campus-tab {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 24px;
+  border-radius: 50px;
+  font-family: var(--font-head);
+  font-size: 14px;
+  font-weight: 600;
+  border: 1px solid var(--glass-border);
+  color: var(--text-secondary);
+  background: rgba(255,255,255,0.03);
+  backdrop-filter: blur(12px);
+  transition: all 0.2s ease;
+}
+
+.campus-tab:hover { color: var(--text-primary); border-color: rgba(255,255,255,0.2); }
+
+.campus-tab.active {
+  background: var(--grad-cyan);
+  color: #000;
+  border-color: transparent;
+  box-shadow: 0 4px 20px rgba(0,212,255,0.3);
+}
+
+/* Content */
+.campus-content { display: flex; flex-direction: column; gap: 40px; }
+
+.campus-desc {
+  padding: 40px;
+  display: flex;
+  align-items: flex-start;
+  gap: 24px;
+}
+
+.campus-desc-title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 12px;
+}
+
+.campus-desc p { color: var(--text-secondary); line-height: 1.7; font-size: 1rem; }
+
+/* Photo grid */
+.campus-photo-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+}
+
+.campus-photo {
+  position: relative;
+  height: 200px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  background: var(--grad-card);
+  cursor: pointer;
+  animation: fadeUp 0.5s ease forwards;
+}
+
+.campus-photo-icon {
+  font-size: 3.5rem;
+  z-index: 1;
+  transition: transform 0.3s ease;
+  font-family: "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji", sans-serif;
+}
+
+.campus-tab span {
+  font-family: "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji", sans-serif;
+}
+.campus-photo:hover .campus-photo-icon { transform: scale(1.2); }
+
+.campus-photo-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(0,212,255,0.05), rgba(124,58,237,0.05));
+}
+
+.campus-photo-1 { height: 240px; }
+.campus-photo-2 { height: 180px; }
+.campus-photo-4 { height: 220px; }
+
+@media (max-width: 768px) {
+  .campus-photo-grid { grid-template-columns: 1fr 1fr; }
+  .campus-photo, .campus-photo-1, .campus-photo-2, .campus-photo-4 { height: 160px; }
+}

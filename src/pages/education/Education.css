@@ -1,0 +1,122 @@
+.page-hero-simple {
+  padding: 80px 24px 60px;
+  background: linear-gradient(180deg, rgba(0,212,255,0.04) 0%, transparent 100%);
+  border-bottom: 1px solid var(--glass-border);
+}
+
+/* Education */
+.edu-truth {
+  display: flex;
+  gap: 32px;
+  padding: 48px;
+  margin-bottom: 64px;
+  background: linear-gradient(135deg, rgba(0,212,255,0.07), rgba(124,58,237,0.04));
+  align-items: flex-start;
+}
+.edu-truth-num {
+  font-family: var(--font-head);
+  font-size: 3rem;
+  font-weight: 900;
+  color: var(--accent-cyan);
+  opacity: 0.25;
+  flex-shrink: 0;
+  line-height: 1;
+}
+.edu-truth-title { font-size: 1.5rem; font-weight: 700; color: var(--text-primary); margin-bottom: 16px; }
+.edu-truth-text { color: var(--text-secondary); line-height: 1.75; font-size: 1rem; }
+
+.edu-approach { margin-bottom: 64px; }
+
+/* Skills */
+.skills-section { margin-bottom: 64px; }
+.skills-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+}
+.skill-card {
+  padding: 32px 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  background: var(--grad-card);
+}
+.skill-icon {
+  font-size: 2.5rem;
+  font-family: "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji", sans-serif;
+}
+.skill-title { font-family: var(--font-head); font-size: 1.05rem; font-weight: 700; color: var(--text-primary); }
+.skill-desc { font-size: 14px; color: var(--text-secondary); line-height: 1.6; flex: 1; }
+.skill-how { font-size: 13px; color: var(--text-muted); }
+.skill-how-label { font-weight: 600; color: var(--accent-cyan); }
+
+/* Classroom table */
+.classroom-section { margin-bottom: 64px; }
+.classroom-table { overflow: hidden; }
+.classroom-header {
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  gap: 16px;
+  padding: 16px 24px;
+  background: rgba(0,212,255,0.06);
+  font-family: var(--font-head);
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--accent-cyan);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+.classroom-row {
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  gap: 16px;
+  padding: 16px 24px;
+  border-top: 1px solid rgba(255,255,255,0.04);
+}
+.classroom-skill { font-weight: 600; color: var(--text-primary); font-size: 14px; }
+.classroom-practice { color: var(--text-secondary); font-size: 14px; }
+
+/* Assessment */
+.assess-section {
+  padding: 48px;
+  margin-bottom: 64px;
+  background: linear-gradient(135deg, rgba(124,58,237,0.06), rgba(0,212,255,0.04));
+}
+.assess-title { font-size: 1.4rem; font-weight: 700; color: var(--text-primary); margin-bottom: 16px; }
+.assess-text { color: var(--text-secondary); line-height: 1.7; }
+
+/* Curriculum */
+.curriculum-section { margin-bottom: 64px; }
+.curriculum-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+}
+.curriculum-card {
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  text-align: center;
+}
+.curriculum-icon { font-size: 2rem; }
+.curriculum-name { font-family: var(--font-head); font-size: 14px; font-weight: 600; color: var(--text-primary); }
+
+/* Closing */
+.edu-closing {
+  padding: 64px;
+  text-align: center;
+  background: linear-gradient(135deg, rgba(0,212,255,0.06), rgba(124,58,237,0.06));
+}
+.edu-closing-title { font-size: 1.8rem; font-weight: 800; color: var(--text-primary); margin-bottom: 20px; }
+.edu-closing-text { font-size: 1.1rem; color: var(--text-secondary); line-height: 1.7; max-width: 700px; margin: 0 auto; }
+
+@media (max-width: 900px) {
+  .skills-grid { grid-template-columns: 1fr 1fr; }
+  .curriculum-grid { grid-template-columns: 1fr 1fr; }
+}
+@media (max-width: 600px) {
+  .skills-grid, .curriculum-grid { grid-template-columns: 1fr; }
+  .edu-truth { flex-direction: column; padding: 32px; }
+}

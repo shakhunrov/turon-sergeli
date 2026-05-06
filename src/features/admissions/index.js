@@ -1,0 +1,16 @@
+export {
+  default as admissionsReducer,
+  submitAdmission,
+  fetchAdmissions,
+  fetchAdmissionById,
+  updateAdmissionStatus,
+  deleteAdmission,
+  resetAdmissionStatus,
+  clearAdmissionsError,
+  clearCurrentAdmission,
+  selectAdmissions,
+  selectCurrentAdmission,
+  selectAdmissionsLoading,
+  selectAdmissionsError,
+  selectAdmissionSubmitSuccess,
+} from './admissionsSlice';
