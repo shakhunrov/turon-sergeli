@@ -25,64 +25,64 @@ import '../pages/admin/AdminDashboard.css';
 
 // Protected route wrapper
 function ProtectedAdminRoute({ children }) {
-  const isAuth = useSelector(selectIsAuth);
-  return isAuth ? children : <Navigate to="/admin" replace />;
+    const isAuth = useSelector(selectIsAuth);
+    return isAuth ? children : <Navigate to="/admin" replace />;
 }
 
 // Public site layout
 function PublicLayout({ children }) {
-  return (
-    <>
-      <Navbar />
-      {children}
-      <Footer />
-      <StickyCTA />
-    </>
-  );
+    return (
+        <>
+            <Navbar />
+            {children}
+            <Footer />
+            <StickyCTA />
+        </>
+    );
 }
 
 export default function App() {
-  return (
-    <LangProvider>
-      <AdminAuthProvider>
-        <BrowserRouter>
-          <Routes>
-            {/* Admin routes (no public navbar/footer) */}
-            <Route path="/admin" element={<AdminLogin />} />
-            <Route
-              path="/admin/dashboard"
-              element={
-                <ProtectedAdminRoute>
-                  <AdminDashboard />
-                </ProtectedAdminRoute>
-              }
-            />
+    return (
+        <LangProvider>
+            <AdminAuthProvider>
+                <BrowserRouter>
+                    <Routes>
+                        {/* Admin routes (no public navbar/footer) */}
+                        <Route path="/admin" element={<AdminLogin />} />
+                        <Route
+                            path="/admin/dashboard"
+                            element={
+                                <ProtectedAdminRoute>
+                                    <AdminDashboard />
+                                </ProtectedAdminRoute>
+                            }
+                        />
 
-            {/* Public routes */}
-            <Route path="/*" element={
-              <PublicLayout>
-                <Routes>
+                        {/* Public routes */}
+                        <Route path="/*" element={
+                            <PublicLayout>
+                                <Routes>
 
-                  <Route path="/" element={<Home />} />
-                  <Route path="/about" element={<Navigate to="/about/vision" replace />} />
-                  <Route path="/about/campus" element={<AboutCampus />} />
-                  <Route path="/about/vision" element={<AboutVision />} />
-                  <Route path="/about/leadership" element={<AboutLeadership />} />
-                  <Route path="/about/why-tis" element={<AboutWhyTis />} />
-                  <Route path="/education" element={<Education />} />
-                  <Route path="/partnerships" element={<Partnerships />} />
-                  <Route path="/careers" element={<Careers />} />
-                  <Route path="/news" element={<News />} />
-                  <Route path="/admissions" element={<Admissions />} />
-                  <Route path="/contact" element={<Contact />} />
-                  <Route path="/policies" element={<Policies />} />
-                  <Route path="*" element={<Navigate to="/" replace />} />
-                </Routes>
-              </PublicLayout>
-            } />
-          </Routes>
-        </BrowserRouter>
-      </AdminAuthProvider>
-    </LangProvider>
-  );
+                                    <Route path="/" element={<Home />} />
+                                    <Route path="/about" element={<Navigate to="/about/vision" replace />} />
+                                    <Route path="/about/campus" element={<AboutCampus />} />
+                                    <Route path="/about/vision" element={<AboutVision />} />
+                                    <Route path="/about/leadership" element={<AboutLeadership />} />
+                                    <Route path="/about/why-tis" element={<AboutWhyTis />} />
+                                    <Route path="/education" element={<Education />} />
+                                    <Route path="/partnerships" element={<Partnerships />} />
+                                    <Route path="/careers" element={<Careers />} />
+                                    <Route path="/news" element={<News />} />
+                                    <Route path="/admissions" element={<Admissions />} />
+                                    <Route path="/contact" element={<Contact />} />
+                                    <Route path="/policies" element={<Policies />} />
+                                    <Route path="*" element={<Navigate to="/" replace />} />
+                                </Routes>
+                            </PublicLayout>
+                        } />
+                    </Routes>
+                </BrowserRouter>
+            </AdminAuthProvider>
+        </LangProvider>
+    );
 }
