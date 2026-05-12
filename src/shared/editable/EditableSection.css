@@ -1,0 +1,275 @@
+/* Editable Section Wrapper */
+.editable-section {
+    position: relative;
+    transition: all 0.3s ease;
+}
+
+/* Edit tugmasi */
+.edit-section-btn {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    z-index: 100;
+    background: rgba(79, 70, 229, 0.95);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 10px 12px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 14px;
+    font-weight: 500;
+    box-shadow: 0 4px 12px rgba(79, 70, 229, 0.3);
+    transition: all 0.2s ease;
+    opacity: 0;
+}
+
+.editable-section:hover .edit-section-btn {
+    opacity: 1;
+}
+
+.edit-section-btn:hover {
+    background: rgba(67, 56, 202, 1);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(79, 70, 229, 0.4);
+}
+
+.edit-section-btn:active {
+    transform: translateY(0);
+}
+
+/* Focus state - section focus bo'lganda */
+.editable-section.focused {
+    position: relative;
+    z-index: 50;
+    outline: 3px solid rgba(79, 70, 229, 0.5);
+    outline-offset: 4px;
+    border-radius: 12px;
+}
+
+.editable-section.focused .edit-section-btn {
+    opacity: 1;
+}
+
+/* Blur state - boshqa section focus bo'lganda */
+.editable-section.blurred {
+    filter: blur(2px);
+    opacity: 0.4;
+    pointer-events: none;
+}
+
+/* Section content */
+.section-content {
+    position: relative;
+}
+
+/* Edit Modal Overlay */
+.edit-modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(4px);
+    z-index: 9999;
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    padding: 20px;
+    animation: fadeIn 0.2s ease;
+    overflow-y: auto;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+/* Edit Modal */
+.edit-modal {
+    background: white;
+    border-radius: 16px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    max-width: 600px;
+    width: 100%;
+    max-height: 90vh;
+    display: flex;
+    flex-direction: column;
+    animation: slideUp 0.3s ease;
+    margin: auto;
+    position: relative;
+}
+
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Modal Header */
+.edit-modal-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px 24px;
+    border-bottom: 1px solid #e5e7eb;
+}
+
+.edit-modal-header h3 {
+    margin: 0;
+    font-size: 20px;
+    font-weight: 600;
+    color: #1a2b6b;
+}
+
+.modal-close-btn {
+    background: none;
+    border: none;
+    color: #64748b;
+    cursor: pointer;
+    padding: 4px;
+    border-radius: 6px;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.modal-close-btn:hover {
+    background: #f1f5f9;
+    color: #1e293b;
+}
+
+/* Modal Body */
+.edit-modal-body {
+    padding: 24px;
+    overflow-y: auto;
+    flex: 1;
+}
+
+.edit-modal-form .form-group {
+    margin-bottom: 20px;
+}
+
+.edit-modal-form .form-label {
+    display: block;
+    margin-bottom: 8px;
+    font-size: 14px;
+    font-weight: 500;
+    color: #374151;
+}
+
+.edit-modal-form .form-input {
+    width: 100%;
+    padding: 10px 14px;
+    border: 1px solid #d1d5db;
+    border-radius: 8px;
+    font-size: 14px;
+    transition: all 0.2s ease;
+    font-family: inherit;
+}
+
+.edit-modal-form .form-input:focus {
+    outline: none;
+    border-color: #4f46e5;
+    box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
+}
+
+.edit-modal-form textarea.form-input {
+    resize: vertical;
+    min-height: 80px;
+}
+
+/* Modal Footer */
+.edit-modal-footer {
+    display: flex;
+    gap: 12px;
+    justify-content: flex-end;
+    padding: 16px 24px;
+    border-top: 1px solid #e5e7eb;
+    background: #f9fafb;
+    border-radius: 0 0 16px 16px;
+}
+
+.edit-modal-footer .btn {
+    padding: 10px 20px;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    border: none;
+}
+
+.edit-modal-footer .btn-outline {
+    background: white;
+    color: #64748b;
+    border: 1px solid #d1d5db;
+}
+
+.edit-modal-footer .btn-outline:hover {
+    background: #f8fafc;
+    border-color: #94a3b8;
+}
+
+.edit-modal-footer .btn-primary {
+    background: #4f46e5;
+    color: white;
+}
+
+.edit-modal-footer .btn-primary:hover {
+    background: #4338ca;
+}
+
+.edit-modal-footer .btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+/* Spinner */
+.al-spinner {
+    width: 14px;
+    height: 14px;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    border-top-color: white;
+    border-radius: 50%;
+    animation: spin 0.6s linear infinite;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .edit-modal {
+        max-width: 100%;
+        max-height: 90vh;
+        margin: 0 10px;
+    }
+
+    .edit-section-btn {
+        opacity: 1;
+        top: 8px;
+        right: 8px;
+        padding: 8px 10px;
+        font-size: 13px;
+    }
+}

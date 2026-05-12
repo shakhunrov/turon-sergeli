@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { useLang } from '../../shared/i18n';
 import LanguageSwitcher from '../../features/language-switcher/LanguageSwitcher';
 import { MessageCircle, ExternalLink, Play, MapPin, Mail, Phone } from 'lucide-react';
@@ -7,16 +7,21 @@ import logo from "../../shared/assets/logo/turonLogo.png"
 
 export default function Footer() {
   const { t } = useLang();
+  const location = useLocation();
+
+  // Editable rejimda ekanligini aniqlash
+  const isEditableMode = location.pathname.startsWith('/editable');
+  const basePrefix = isEditableMode ? '/editable' : '';
 
   const quickLinks = [
-    { label: t.nav.home, href: '/' },
-    { label: t.nav.about, href: '/about/vision' },
-    { label: t.nav.education, href: '/education' },
-    { label: t.nav.partnerships, href: '/partnerships' },
-    { label: t.nav.careers, href: '/careers' },
-    { label: t.nav.news, href: '/news' },
-    { label: t.nav.admissions, href: '/admissions' },
-    { label: t.nav.contact, href: '/contact' },
+    { label: t.nav.home, href: basePrefix + '/' },
+    { label: t.nav.about, href: basePrefix + '/about/vision' },
+    { label: t.nav.education, href: basePrefix + '/education' },
+    { label: t.nav.partnerships, href: basePrefix + '/partnerships' },
+    { label: t.nav.careers, href: basePrefix + '/careers' },
+    { label: t.nav.news, href: basePrefix + '/news' },
+    { label: t.nav.admissions, href: basePrefix + '/admissions' },
+    { label: t.nav.contact, href: basePrefix + '/contact' },
   ];
 
   return (

@@ -32,6 +32,10 @@ export default function Navbar() {
   const [open, setOpen] = useState(false);
   const [dropdown, setDropdown] = useState(null);
 
+  // Editable rejimda ekanligini aniqlash
+  const isEditableMode = location.pathname.startsWith('/editable');
+  const basePrefix = isEditableMode ? '/editable' : '';
+
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 40);
     window.addEventListener('scroll', onScroll);
@@ -40,13 +44,20 @@ export default function Navbar() {
 
   useEffect(() => { setOpen(false); setDropdown(null); }, [location.pathname]);
 
-  const links = navLinks(t);
+  const links = navLinks(t).map(link => ({
+    ...link,
+    href: basePrefix + link.href,
+    children: link.children?.map(child => ({
+      ...child,
+      href: basePrefix + child.href,
+    })),
+  }));
 
   return (
     <header className={`navbar ${scrolled ? 'scrolled' : ''}`}>
       <div className="container navbar-inner">
         {/* Logo */}
-        <Link to="/" className="navbar-logo">
+        <Link to={basePrefix + "/"} className="navbar-logo">
           <div className="logo-icon">
               <img  width={70} src={logo} alt=""/>
           </div>
@@ -73,7 +84,11 @@ export default function Navbar() {
                 {link.children && <svg width="12" height="12" viewBox="0 0 12 12" fill="currentColor" style={{marginLeft:4}}><path d="M2 4l4 4 4-4"/></svg>}
               </Link>
               {link.children && dropdown === link.href && (
-                <div className="nav-dropdown">
+                <div
+                  className="nav-dropdown"
+                  onMouseEnter={() => setDropdown(link.href)}
+                  onMouseLeave={() => setDropdown(null)}
+                >
                   {link.children.map((child) => (
                     <Link key={child.href} to={child.href} className="nav-dropdown-item">
                       {child.label}
@@ -88,7 +103,7 @@ export default function Navbar() {
         {/* Right side */}
         <div className="navbar-right">
           <LanguageSwitcher />
-          <Link to="/admissions" className="btn btn-primary btn-sm">
+          <Link to={basePrefix + "/admissions"} className="btn btn-primary btn-sm">
             {t.hero.apply}
           </Link>
           <button className="menu-btn" onClick={() => setOpen(!open)} aria-label="Menu">

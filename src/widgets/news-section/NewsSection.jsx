@@ -1,9 +1,12 @@
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { useLang } from '../../shared/i18n';
 import './NewsSection.css';
 
 export default function NewsSection() {
   const { t } = useLang();
+  const location = useLocation();
+  const isEditableMode = location.pathname.startsWith('/editable');
+  const basePrefix = isEditableMode ? '/editable' : '';
 
   return (
     <section className="news-section section">
@@ -22,14 +25,14 @@ export default function NewsSection() {
                 <time className="news-date">{item.date}</time>
                 <h3 className="news-title">{item.title}</h3>
                 <p className="news-desc">{item.desc}</p>
-                <Link to="/news" className="news-read-more">{t.news.readMore} →</Link>
+                <Link to={`${basePrefix}/news`} className="news-read-more">{t.news.readMore} →</Link>
               </div>
             </article>
           ))}
         </div>
 
         <div style={{ textAlign: 'center', marginTop: 40 }}>
-          <Link to="/news" className="btn btn-outline">Barcha yangiliklar</Link>
+          <Link to={`${basePrefix}/news`} className="btn btn-outline">Barcha yangiliklar</Link>
         </div>
       </div>
     </section>

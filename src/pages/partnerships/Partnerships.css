@@ -5,6 +5,11 @@
   border-bottom: 1px solid var(--glass-border);
 }
 
+/* Stats section edit button positioning - only for partnerships page */
+.editable-section[data-section-id="stats"] .stats-edit-btn {
+  top: -60px;
+}
+
 /* Partner stats */
 .partner-stats {
   display: grid;
