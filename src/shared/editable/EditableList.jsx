@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { createPortal } from 'react-dom';
+import { useLocation } from 'react-router-dom';
 import { Edit2, Trash2, Plus, Save, X } from 'lucide-react';
 import './EditableList.css';
 
@@ -8,6 +9,8 @@ import './EditableList.css';
  * Har bir card'da alohida edit tugmasi
  */
 export default function EditableList({ items = [], onSave, renderItem, defaultItem = {}, itemName = "Item" }) {
+    const location = useLocation();
+    const isEditableMode = location.pathname.startsWith('/editable');
     const [editingIndex, setEditingIndex] = useState(null);
     const [isCreating, setIsCreating] = useState(false);
     const [formData, setFormData] = useState({});
@@ -143,31 +146,35 @@ export default function EditableList({ items = [], onSave, renderItem, defaultIt
                         {renderItem(item, index)}
                     </div>
 
-                    {/* Edit/Delete buttons - har bir card ustida */}
-                    <div className="editable-list-item-actions">
-                        <button
-                            className="editable-list-action-btn edit"
-                            onClick={(e) => handleEdit(index, e)}
-                            title="Tahrirlash"
-                        >
-                            <Edit2 size={14} />
-                        </button>
-                        <button
-                            className="editable-list-action-btn delete"
-                            onClick={(e) => handleDelete(index, e)}
-                            title="O'chirish"
-                        >
-                            <Trash2 size={14} />
-                        </button>
-                    </div>
+                    {/* Edit/Delete buttons - faqat editable rejimda */}
+                    {isEditableMode && (
+                        <div className="editable-list-item-actions">
+                            <button
+                                className="editable-list-action-btn edit"
+                                onClick={(e) => handleEdit(index, e)}
+                                title="Tahrirlash"
+                            >
+                                <Edit2 size={14} />
+                            </button>
+                            <button
+                                className="editable-list-action-btn delete"
+                                onClick={(e) => handleDelete(index, e)}
+                                title="O'chirish"
+                            >
+                                <Trash2 size={14} />
+                            </button>
+                        </div>
+                    )}
                 </div>
             ))}
 
-            {/* Create tugmasi - pastda */}
-            <button className="editable-list-create-btn" onClick={handleCreate} title={`Yangi ${itemName} qo'shish`}>
-                <Plus size={16} />
-                <span>Yangi {itemName}</span>
-            </button>
+            {/* Create tugmasi - faqat editable rejimda */}
+            {isEditableMode && (
+                <button className="editable-list-create-btn" onClick={handleCreate} title={`Yangi ${itemName} qo'shish`}>
+                    <Plus size={16} />
+                    <span>Yangi {itemName}</span>
+                </button>
+            )}
 
             {/* Edit/Create Modal */}
             {(editingIndex !== null || isCreating) && createPortal(

@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { createPortal } from 'react-dom';
+import { useLocation } from 'react-router-dom';
 import { Edit2, Save, X } from 'lucide-react';
 import './EditableSection.css';
 
@@ -12,6 +13,8 @@ import './EditableSection.css';
  * @param {ReactNode} children - section content
  */
 export default function EditableSection({ sectionId, data, onSave, children, buttonStyle, className, buttonClassName }) {
+    const location = useLocation();
+    const isEditableMode = location.pathname.startsWith('/editable');
     const [isEditing, setIsEditing] = useState(false);
     const [isFocused, setIsFocused] = useState(false);
 
@@ -56,15 +59,17 @@ export default function EditableSection({ sectionId, data, onSave, children, but
             className={`editable-section ${isFocused ? 'focused' : ''} ${!isFocused && isEditing ? 'blurred' : ''} ${className || ''}`}
             data-section-id={sectionId}
         >
-            {/* Edit tugmasi */}
-            <button
-                className={`edit-section-btn ${buttonClassName || ''}`}
-                onClick={handleEdit}
-                title="Bu section'ni tahrirlash"
-                style={buttonStyle}
-            >
-                <Edit2 size={16} />
-            </button>
+            {/* Edit tugmasi - faqat editable rejimda */}
+            {isEditableMode && (
+                <button
+                    className={`edit-section-btn ${buttonClassName || ''}`}
+                    onClick={handleEdit}
+                    title="Bu section'ni tahrirlash"
+                    style={buttonStyle}
+                >
+                    <Edit2 size={16} />
+                </button>
+            )}
 
             {/* Section content */}
             <div className="section-content">

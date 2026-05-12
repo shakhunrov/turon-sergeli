@@ -40,6 +40,10 @@ export default function EditableHeroBanner() {
               }
 
               if (content && Object.keys(content).length > 0) {
+                // Agar section'da image field alohida bo'lsa, uni qo'shamiz
+                if (heroSection.image) {
+                  content.image = heroSection.image;
+                }
                 setHeroData(prev => ({ ...prev, ...content }));
               }
             } catch (e) {
@@ -47,7 +51,7 @@ export default function EditableHeroBanner() {
             }
           }
 
-          const statsSection = data.find(section => section.section_id === 'stats');
+          const statsSection = data.find(section => section.section_id === 'hero-stats');
           if (statsSection) {
             try {
               const contentField = `content_${lang}`;
@@ -58,6 +62,10 @@ export default function EditableHeroBanner() {
               }
 
               if (content && Object.keys(content).length > 0) {
+                // Agar section'da image field alohida bo'lsa, uni qo'shamiz
+                if (statsSection.image) {
+                  content.image = statsSection.image;
+                }
                 setStatsData(prev => ({
                   students: content.students || prev.students,
                   teachers: content.teachers || prev.teachers,
@@ -79,17 +87,64 @@ export default function EditableHeroBanner() {
   // Hero'ni saqlash
   const handleSaveHero = async (data) => {
     try {
-      const contentField = `content_${lang}`;
-      await savePageSection({
+      const payload = {
         branch: branchId,
         page: 'home',
         section_id: 'hero',
-        [contentField]: JSON.stringify(data),
+      };
+
+      // Agar data ichida File obyekti bo'lsa, uni alohida yuboramiz
+      const contentData = {};
+
+      Object.keys(data).forEach(key => {
+        if (data[key] instanceof File) {
+          // File obyektini to'g'ridan-to'g'ri payload'ga qo'shamiz
+          payload[key] = data[key];
+        } else {
+          contentData[key] = data[key];
+        }
       });
+
+      // Content'ni til uchun saqlash
+      const contentField = `content_${lang}`;
+      payload[contentField] = JSON.stringify(contentData);
+
+      await savePageSection(payload);
       setHeroData(data);
       alert('Hero muvaffaqiyatli saqlandi!');
     } catch (error) {
       console.error('Hero saqlashda xatolik:', error);
+      alert('Xatolik yuz berdi. Qaytadan urinib ko\'ring.');
+    }
+  };
+
+  // Stats'ni saqlash
+  const handleSaveStats = async (data) => {
+    try {
+      const payload = {
+        branch: branchId,
+        page: 'home',
+        section_id: 'hero-stats',
+      };
+
+      const contentData = {};
+
+      Object.keys(data).forEach(key => {
+        if (data[key] instanceof File) {
+          payload[key] = data[key];
+        } else {
+          contentData[key] = data[key];
+        }
+      });
+
+      const contentField = `content_${lang}`;
+      payload[contentField] = JSON.stringify(contentData);
+
+      await savePageSection(payload);
+      setStatsData(data);
+      alert('Stats muvaffaqiyatli saqlandi!');
+    } catch (error) {
+      console.error('Stats saqlashda xatolik:', error);
       alert('Xatolik yuz berdi. Qaytadan urinib ko\'ring.');
     }
   };
@@ -133,24 +188,31 @@ export default function EditableHeroBanner() {
           </div>
 
           {/* Stats row */}
-          <div className="hero-stats fade-up-d3">
-            <div className="hero-stat">
-              <div className="hero-stat-val">{statsData.students.val}</div>
-              <div className="hero-stat-label">{statsData.students.label}</div>
+          <EditableSection
+            sectionId="hero-stats"
+            data={statsData}
+            onSave={handleSaveStats}
+            buttonStyle={{ bottom: '20px', right: '20px' }}
+          >
+            <div className="hero-stats fade-up-d3">
+              <div className="hero-stat">
+                <div className="hero-stat-val">{statsData.students.val}</div>
+                <div className="hero-stat-label">{statsData.students.label}</div>
+              </div>
+              <div className="hero-stat">
+                <div className="hero-stat-val">{statsData.teachers.val}</div>
+                <div className="hero-stat-label">{statsData.teachers.label}</div>
+              </div>
+              <div className="hero-stat">
+                <div className="hero-stat-val">{statsData.universities.val}</div>
+                <div className="hero-stat-label">{statsData.universities.label}</div>
+              </div>
+              <div className="hero-stat">
+                <div className="hero-stat-val">3</div>
+                <div className="hero-stat-label">Languages</div>
+              </div>
             </div>
-            <div className="hero-stat">
-              <div className="hero-stat-val">{statsData.teachers.val}</div>
-              <div className="hero-stat-label">{statsData.teachers.label}</div>
-            </div>
-            <div className="hero-stat">
-              <div className="hero-stat-val">{statsData.universities.val}</div>
-              <div className="hero-stat-label">{statsData.universities.label}</div>
-            </div>
-            <div className="hero-stat">
-              <div className="hero-stat-val">3</div>
-              <div className="hero-stat-label">Languages</div>
-            </div>
-          </div>
+          </EditableSection>
         </div>
 
         {/* Scroll indicator */}
