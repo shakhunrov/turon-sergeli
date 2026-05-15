@@ -61,28 +61,28 @@ export default function EditableTestimonials() {
 
           {/* Editable List for managing testimonials */}
           <div style={{ marginTop: 40 }}>
-            <EditableList
-              items={items}
-              onSave={(newItems) => {
-                handleSaveSection('main', { ...sections.main, items: newItems });
-                if (idx >= newItems.length) setIdx(0);
-              }}
-              renderItem={(item) => (
-                <div className="testimonial-card glass-card" style={{ marginBottom: 16 }}>
-                  <Quote size={24} className="testi-quote-icon" />
-                  <p className="testi-text" style={{ fontSize: 14 }}>{item.text}</p>
-                  <div className="testi-author">
-                    <div className="testi-avatar">{item.name?.[0]}</div>
-                    <div>
-                      <div className="testi-name">{item.name}</div>
-                      <div className="testi-role">{item.role}</div>
-                    </div>
-                  </div>
-                </div>
-              )}
-              defaultItem={{ icon: '', name: '', role: '', text: '' }}
-              itemName="Fikr"
-            />
+            {/*<EditableList*/}
+            {/*  items={items}*/}
+            {/*  onSave={(newItems) => {*/}
+            {/*    handleSaveSection('main', { ...sections.main, items: newItems });*/}
+            {/*    if (idx >= newItems.length) setIdx(0);*/}
+            {/*  }}*/}
+            {/*  renderItem={(item) => (*/}
+            {/*    <div className="testimonial-card glass-card" style={{ marginBottom: 16 }}>*/}
+            {/*      <Quote size={24} className="testi-quote-icon" />*/}
+            {/*      <p className="testi-text" style={{ fontSize: 14 }}>{item.text}</p>*/}
+            {/*      <div className="testi-author">*/}
+            {/*        <div className="testi-avatar">{item.name?.[0]}</div>*/}
+            {/*        <div>*/}
+            {/*          <div className="testi-name">{item.name}</div>*/}
+            {/*          <div className="testi-role">{item.role}</div>*/}
+            {/*        </div>*/}
+            {/*      </div>*/}
+            {/*    </div>*/}
+            {/*  )}*/}
+            {/*  defaultItem={{ icon: '', name: '', role: '', text: '' }}*/}
+            {/*  itemName="Fikr"*/}
+            {/*/>*/}
           </div>
         </div>
       </section>

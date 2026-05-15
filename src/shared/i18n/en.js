@@ -25,8 +25,8 @@ const en = {
   },
   ourSchool: {
     title: "Our School",
-    chirchiq: "TIS Sergeli",
-    chirchiqDesc: "Four distinct learning environments, united by a shared commitment to educational excellence.",
+    sergeli: "TIS Sergeli",
+    sergeliDesc: "Four distinct learning environments, united by a shared commitment to educational excellence.",
     locationDesc: "We develop each student's potential through a strong commitment to educational excellence.",
   },
   stats: {

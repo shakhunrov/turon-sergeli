@@ -11,7 +11,7 @@ export const loginThunk = createAsyncThunk(
             // Persist tokens
             localStorage.setItem('access_token', data.access);
             localStorage.setItem('refresh_token', data.refresh);
-
+            localStorage.setItem('globalBranchId', data?.user?.branch?.id)
             return data; // { access, refresh }
         } catch (err) {
             return rejectWithValue(
@@ -32,6 +32,7 @@ export const refreshTokenThunk = createAsyncThunk(
             localStorage.setItem('access_token', data.access);
             if (data.refresh) {
                 localStorage.setItem('refresh_token', data.refresh);
+                localStorage.setItem('globalBranchId', data.user.location_id);
             }
             return data;
         } catch (err) {

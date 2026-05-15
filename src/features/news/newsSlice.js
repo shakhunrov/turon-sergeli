@@ -1,7 +1,7 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { api } from '../../shared/api';
 
-const ENDPOINT = '/website-sources/public/news/';
+const ENDPOINT = 'website-sources/public/news/';
 
 // ── Thunks ────────────────────────────────────────────────────────
 

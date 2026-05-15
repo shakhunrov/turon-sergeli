@@ -1,7 +1,10 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useLang } from '../../shared/i18n';
 import { EditableSection } from '../../shared/editable';
 import { useEditableSections } from '../../shared/api/useEditableSections';
+import { getPageSections, uploadSectionImages, deleteSectionImage } from '../../shared/api/pageSections';
+import { Upload, Trash2 } from 'lucide-react';
+import { useLocation } from 'react-router-dom';
 import './AboutCampus.css';
 
 const TABS = ['education', 'houses', 'sports'];
@@ -12,28 +15,40 @@ const tabData = (t) => [
     label: t.about.campus.educationTitle,
     icon: '📚',
     desc: t.about.campus.educationDesc,
-    imgs: ['🏫', '📖', '🔬', '🎨', '💻', '🌍'],
   },
   {
     key: 'houses',
     label: t.about.campus.housesTitle,
     icon: '🏡',
     desc: t.about.campus.housesDesc,
-    imgs: ['🏡', '⭐', '🔥', '🌊', '🌿', '🦅'],
   },
   {
     key: 'sports',
     label: t.about.campus.sportsTitle,
     icon: '🏆',
     desc: t.about.campus.sportsDesc,
-    imgs: ['⚽', '🏀', '🎾', '🏊', '🏃', '🤸'],
   },
 ];
 
 export default function EditableAboutCampus() {
   const { t } = useLang();
+  const location = useLocation();
+  const isEditableMode = location.pathname.startsWith('/editable');
+  const branchId = localStorage.getItem('globalBranchId');
   const [activeTab, setActiveTab] = useState('education');
   const tabs = tabData(t);
+  const fileInputRef = useRef(null);
+  const [uploading, setUploading] = useState(false);
+  const [sectionImages, setSectionImages] = useState({
+    education: [],
+    houses: [],
+    sports: [],
+  });
+  const [sectionIds, setSectionIds] = useState({
+    education: null,
+    houses: null,
+    sports: null,
+  });
 
   const { sections, handleSaveSection } = useEditableSections('about-campus', {
     hero: {
@@ -44,23 +59,98 @@ export default function EditableAboutCampus() {
       label: tabs[0].label,
       icon: tabs[0].icon,
       desc: tabs[0].desc,
-      imgs: tabs[0].imgs,
     },
     houses: {
       label: tabs[1].label,
       icon: tabs[1].icon,
       desc: tabs[1].desc,
-      imgs: tabs[1].imgs,
     },
     sports: {
       label: tabs[2].label,
       icon: tabs[2].icon,
       desc: tabs[2].desc,
-      imgs: tabs[2].imgs,
     },
   });
 
+  // Backend'dan rasmlarni yuklash
+  useEffect(() => {
+    const loadImages = async () => {
+      try {
+        const data = await getPageSections({ branch: branchId, page: 'about-campus' });
+        if (data && data.length > 0) {
+          const newSectionImages = { education: [], houses: [], sports: [] };
+          const newSectionIds = { education: null, houses: null, sports: null };
+
+          data.forEach(section => {
+            if (TABS.includes(section.section_id)) {
+              newSectionIds[section.section_id] = section.id;
+              if (section.images && section.images.length > 0) {
+                newSectionImages[section.section_id] = section.images.sort((a, b) => a.order - b.order);
+              }
+            }
+          });
+
+          setSectionImages(newSectionImages);
+          setSectionIds(newSectionIds);
+        }
+      } catch (error) {
+        console.error('Rasmlarni yuklashda xatolik:', error);
+      }
+    };
+    loadImages();
+  }, [branchId]);
+
+  // Rasmlarni yuklash
+  const handleImageUpload = async (e) => {
+    const files = Array.from(e.target.files || []);
+    if (files.length === 0) return;
+
+    const sectionId = sectionIds[activeTab];
+    if (!sectionId) {
+      alert('Avval section ma\'lumotlarini saqlang!');
+      return;
+    }
+
+    setUploading(true);
+    try {
+      const response = await uploadSectionImages(sectionId, files);
+      if (response.images) {
+        setSectionImages(prev => ({
+          ...prev,
+          [activeTab]: response.images.sort((a, b) => a.order - b.order),
+        }));
+      }
+      alert('Rasmlar muvaffaqiyatli yuklandi!');
+    } catch (error) {
+      console.error('Rasmlarni yuklashda xatolik:', error);
+      alert('Xatolik yuz berdi. Qaytadan urinib ko\'ring.');
+    } finally {
+      setUploading(false);
+      if (fileInputRef.current) {
+        fileInputRef.current.value = '';
+      }
+    }
+  };
+
+  // Rasmni o'chirish
+  const handleDeleteImage = async (imageId) => {
+    if (!confirm('Rasmni o\'chirmoqchimisiz?')) return;
+
+    try {
+      await deleteSectionImage(imageId);
+      setSectionImages(prev => ({
+        ...prev,
+        [activeTab]: prev[activeTab].filter(img => img.id !== imageId),
+      }));
+      alert('Rasm o\'chirildi!');
+    } catch (error) {
+      console.error('Rasmni o\'chirishda xatolik:', error);
+      alert('Xatolik yuz berdi. Qaytadan urinib ko\'ring.');
+    }
+  };
+
   const current = sections[activeTab] || tabs.find((tb) => tb.key === activeTab);
+  const currentImages = sectionImages[activeTab] || [];
 
   return (
     <div className="page">
@@ -105,15 +195,61 @@ export default function EditableAboutCampus() {
                 <p>{current.desc}</p>
               </div>
 
-              {/* Photo grid with emoji placeholders */}
-              <div className="campus-photo-grid">
-                {current.imgs.map((img, i) => (
-                  <div key={i} className={`campus-photo glass-card campus-photo-${i % 3}`}>
-                    <span className="campus-photo-icon">{img}</span>
-                    <div className="campus-photo-overlay" />
-                  </div>
-                ))}
-              </div>
+              {/* Upload button - faqat editable rejimda */}
+              {isEditableMode && (
+                <div style={{ marginBottom: 20, textAlign: 'center' }}>
+                  <input
+                    ref={fileInputRef}
+                    type="file"
+                    accept="image/*"
+                    multiple
+                    style={{ display: 'none' }}
+                    onChange={handleImageUpload}
+                  />
+                  <button
+                    className="btn btn-primary"
+                    onClick={() => fileInputRef.current?.click()}
+                    disabled={uploading}
+                  >
+                    <Upload size={16} />
+                    {uploading ? ' Yuklanmoqda...' : ' Rasmlar yuklash'}
+                  </button>
+                </div>
+              )}
+
+              {/* Photo grid - chiroyli avtomatik grid */}
+              {currentImages.length > 0 ? (
+                <div className="campus-photo-grid">
+                  {currentImages.map((img, i) => (
+                    <div key={img.id} className={`campus-photo glass-card campus-photo-${i % 6}`}>
+                      <img
+                        src={img.image}
+                        alt={`Campus ${i + 1}`}
+                        style={{
+                          width: '100%',
+                          height: '100%',
+                          objectFit: 'cover',
+                          borderRadius: '12px',
+                        }}
+                      />
+                      {isEditableMode && (
+                        <button
+                          className="campus-photo-delete"
+                          onClick={() => handleDeleteImage(img.id)}
+                          title="O'chirish"
+                        >
+                          <Trash2 size={16} />
+                        </button>
+                      )}
+                      <div className="campus-photo-overlay" />
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <div style={{ textAlign: 'center', padding: 60, color: '#94a3b8' }}>
+                  {isEditableMode ? 'Rasmlar yuklash uchun yuqoridagi tugmani bosing' : 'Rasmlar mavjud emas'}
+                </div>
+              )}
             </div>
           </EditableSection>
         </div>

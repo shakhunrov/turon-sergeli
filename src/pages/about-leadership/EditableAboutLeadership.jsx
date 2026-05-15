@@ -31,6 +31,7 @@ export default function EditableAboutLeadership() {
     },
   });
 
+    console.log(sections, 'seksiya')
   return (
     <div className="page">
       <EditableSection

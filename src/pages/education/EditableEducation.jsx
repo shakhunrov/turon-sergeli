@@ -85,14 +85,29 @@ export default function EditableEducation() {
 
     const handleSaveSection = async (sectionId, data) => {
         try {
-            // Отправляем в поле для текущего языка
-            const contentField = `content_${lang}`;
-            await savePageSection({
+            const payload = {
                 branch: branchId,
                 page: 'education',
                 section_id: sectionId,
-                [contentField]: JSON.stringify(data),
+            };
+
+            // Agar data ichida File obyekti bo'lsa, uni alohida yuboramiz
+            const contentData = {};
+
+            Object.keys(data).forEach(key => {
+                if (data[key] instanceof File) {
+                    // File obyektini to'g'ridan-to'g'ri payload'ga qo'shamiz
+                    payload[key] = data[key];
+                } else {
+                    contentData[key] = data[key];
+                }
             });
+
+            // Content'ni til uchun saqlash
+            const contentField = `content_${lang}`;
+            payload[contentField] = JSON.stringify(contentData);
+
+            await savePageSection(payload);
             setSections(prev => ({ ...prev, [sectionId]: data }));
             alert('Section muvaffaqiyatli saqlandi!');
         } catch (error) {

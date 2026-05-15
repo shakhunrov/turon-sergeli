@@ -44,6 +44,17 @@ export default function Navbar() {
 
   useEffect(() => { setOpen(false); setDropdown(null); }, [location.pathname]);
 
+  // Dropdown tashqarisiga click qilganda yopish
+  useEffect(() => {
+    const handleClickOutside = (e) => {
+      if (dropdown && !e.target.closest('.nav-item')) {
+        setDropdown(null);
+      }
+    };
+    document.addEventListener('click', handleClickOutside);
+    return () => document.removeEventListener('click', handleClickOutside);
+  }, [dropdown]);
+
   const links = navLinks(t).map(link => ({
     ...link,
     href: basePrefix + link.href,
@@ -73,22 +84,25 @@ export default function Navbar() {
             <div
               key={link.href}
               className="nav-item"
-              onMouseEnter={() => link.children && setDropdown(link.href)}
-              onMouseLeave={() => setDropdown(null)}
             >
-              <Link
-                to={link.href}
-                className={`nav-link ${location.pathname === link.href || location.pathname.startsWith(link.href + '/') ? 'active' : ''}`}
-              >
-                {link.label}
-                {link.children && <svg width="12" height="12" viewBox="0 0 12 12" fill="currentColor" style={{marginLeft:4}}><path d="M2 4l4 4 4-4"/></svg>}
-              </Link>
-              {link.children && dropdown === link.href && (
-                <div
-                  className="nav-dropdown"
-                  onMouseEnter={() => setDropdown(link.href)}
-                  onMouseLeave={() => setDropdown(null)}
+              {link.children ? (
+                <button
+                  className={`nav-link ${location.pathname === link.href || location.pathname.startsWith(link.href + '/') ? 'active' : ''}`}
+                  onClick={() => setDropdown(dropdown === link.href ? null : link.href)}
                 >
+                  {link.label}
+                  <svg width="12" height="12" viewBox="0 0 12 12" fill="currentColor" style={{marginLeft:4}}><path d="M2 4l4 4 4-4"/></svg>
+                </button>
+              ) : (
+                <Link
+                  to={link.href}
+                  className={`nav-link ${location.pathname === link.href || location.pathname.startsWith(link.href + '/') ? 'active' : ''}`}
+                >
+                  {link.label}
+                </Link>
+              )}
+              {link.children && dropdown === link.href && (
+                <div className="nav-dropdown">
                   {link.children.map((child) => (
                     <Link key={child.href} to={child.href} className="nav-dropdown-item">
                       {child.label}

@@ -33,6 +33,11 @@ export function useEditableSections(pageName, defaultSections) {
 
                             if (content && Object.keys(content).length > 0) {
                                 loadedSections[section.section_id] = content;
+
+                                // Agar section'da image field alohida bo'lsa, uni qo'shamiz
+                                if (section.image) {
+                                    loadedSections[section.section_id].image = section.image;
+                                }
                             }
                         } catch (e) {
                             console.error(`Section ${section.section_id} parse error:`, e);
@@ -49,14 +54,31 @@ export function useEditableSections(pageName, defaultSections) {
 
     const handleSaveSection = async (sectionId, data) => {
         try {
-            // Отправляем в поле для текущего языка
-            const contentField = `content_${lang}`;
-            await savePageSection({
+            const payload = {
                 branch: branchId,
                 page: pageName,
                 section_id: sectionId,
-                [contentField]: JSON.stringify(data),
+            };
+
+            // Agar data ichida File obyekti bo'lsa, uni alohida yuboramiz
+            let hasFile = false;
+            const contentData = {};
+
+            Object.keys(data).forEach(key => {
+                if (data[key] instanceof File) {
+                    // File obyektini to'g'ridan-to'g'ri payload'ga qo'shamiz
+                    payload[key] = data[key];
+                    hasFile = true;
+                } else {
+                    contentData[key] = data[key];
+                }
             });
+
+            // Content'ni til uchun saqlash
+            const contentField = `content_${lang}`;
+            payload[contentField] = JSON.stringify(contentData);
+
+            await savePageSection(payload);
             setSections(prev => ({ ...prev, [sectionId]: data }));
             alert('Section muvaffaqiyatli saqlandi!');
         } catch (error) {

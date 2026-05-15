@@ -47,7 +47,7 @@ export default function Contact() {
         <div className="container contact-grid">
           {/* Info */}
           <div className="contact-info">
-            <h2 className="section-title" style={{ fontSize: '1.5rem' }}>TIS Sergeli</h2>
+            <h2 className="section-title" style={{ fontSize: '1.5rem' }}>{c.schoolName || 'TIS Sergeli'}</h2>
             <div className="divider" />
             {[
               { icon: '📍', label: c.address },
@@ -63,9 +63,9 @@ export default function Contact() {
             {/* Map placeholder */}
             <div className="map-placeholder glass-card">
               <div className="map-icon">🗺️</div>
-              <p>Sergeli, Tashkent Region</p>
+              <p>{c.mapTitle || 'Sergeli, Tashkent Region'}</p>
               <a href="https://maps.app.goo.gl/PgHEEa95VYGmd5ow7" target="_blank" rel="noreferrer" className="btn btn-outline" style={{ fontSize: 13 }}>
-                Open in Google Maps →
+                {c.openMap || 'Open in Google Maps'} →
               </a>
             </div>
           </div>

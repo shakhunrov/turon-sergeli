@@ -60,11 +60,12 @@
 
 .campus-desc p { color: var(--text-secondary); line-height: 1.7; font-size: 1rem; }
 
-/* Photo grid */
+/* Photo grid - chiroyli avtomatik grid */
 .campus-photo-grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
   gap: 16px;
+  grid-auto-flow: dense;
 }
 
 .campus-photo {
@@ -77,6 +78,12 @@
   background: var(--grad-card);
   cursor: pointer;
   animation: fadeUp 0.5s ease forwards;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.campus-photo:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 30px rgba(0,212,255,0.2);
 }
 
 .campus-photo-icon {
@@ -95,13 +102,65 @@
   position: absolute;
   inset: 0;
   background: linear-gradient(135deg, rgba(0,212,255,0.05), rgba(124,58,237,0.05));
+  transition: opacity 0.3s ease;
 }
 
-.campus-photo-1 { height: 240px; }
-.campus-photo-2 { height: 180px; }
-.campus-photo-4 { height: 220px; }
+.campus-photo:hover .campus-photo-overlay {
+  opacity: 0.7;
+}
+
+/* Delete button */
+.campus-photo-delete {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  z-index: 10;
+  background: rgba(239, 68, 68, 0.9);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 8px;
+  cursor: pointer;
+  opacity: 0;
+  transition: opacity 0.3s ease, transform 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.campus-photo:hover .campus-photo-delete {
+  opacity: 1;
+}
+
+.campus-photo-delete:hover {
+  transform: scale(1.1);
+  background: rgba(220, 38, 38, 1);
+}
+
+/* Chiroyli grid pattern - har xil o'lchamlar */
+.campus-photo:nth-child(6n+1) {
+  grid-column: span 2;
+  height: 280px;
+}
+
+.campus-photo:nth-child(6n+4) {
+  height: 240px;
+}
+
+.campus-photo:nth-child(6n+5) {
+  height: 180px;
+}
 
 @media (max-width: 768px) {
-  .campus-photo-grid { grid-template-columns: 1fr 1fr; }
-  .campus-photo, .campus-photo-1, .campus-photo-2, .campus-photo-4 { height: 160px; }
+  .campus-photo-grid {
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 12px;
+  }
+  .campus-photo,
+  .campus-photo:nth-child(6n+1),
+  .campus-photo:nth-child(6n+4),
+  .campus-photo:nth-child(6n+5) {
+    height: 160px;
+    grid-column: span 1;
+  }
 }
