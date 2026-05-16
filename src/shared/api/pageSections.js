@@ -12,7 +12,16 @@ export const getPageSections = async (params) => {
 };
 
 // Section yaratish yoki yangilash
-export const savePageSection = async (data) => {
+export const savePageSection = async (data, isFormData = false) => {
+    // Agar data allaqachon FormData bo'lsa, to'g'ridan-to'g'ri yuboramiz
+    if (isFormData && data instanceof FormData) {
+        const response = await api.post('/website-sources/page-sections/', data, {
+            headers: { 'Content-Type': 'multipart/form-data' },
+        });
+        return response.data;
+    }
+
+    // Aks holda, oddiy object'dan FormData yaratamiz
     const formData = new FormData();
 
     // Har bir key'ni tekshiramiz

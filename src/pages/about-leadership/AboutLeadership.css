@@ -77,7 +77,7 @@
   align-items: center;
   gap: 12px;
 }
-.board-avatar { font-size: 3rem; }
+.board-avatar { font-size: 3rem; display: flex; align-items: center; justify-content: center }
 .board-name { font-family: var(--font-head); font-weight: 700; font-size: 15px; color: var(--text-primary); }
 .board-role { font-size: 13px; color: var(--text-muted); }
 

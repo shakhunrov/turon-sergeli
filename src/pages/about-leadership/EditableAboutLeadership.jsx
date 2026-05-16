@@ -1,12 +1,16 @@
+import { useState } from 'react';
 import { useLang } from '../../shared/i18n';
 import { EditableSection, EditableList } from '../../shared/editable';
 import { useEditableSections } from '../../shared/api/useEditableSections';
+import { savePageSection } from '../../shared/api/pageSections';
 import directorImg from '../../shared/assets/img/director.png';
 import './AboutLeadership.css';
 
 export default function EditableAboutLeadership() {
-  const { t } = useLang();
+  const { t, lang } = useLang();
   const l = t.about.leadership;
+  const branchId = localStorage.getItem('globalBranchId');
+  const [uploading, setUploading] = useState(false);
 
   const { sections, handleSaveSection } = useEditableSections('about-leadership', {
     hero: {
@@ -30,6 +34,46 @@ export default function EditableAboutLeadership() {
       ],
     },
   });
+
+  // Board member saqlashda rasmni alohida yuklash
+  const handleSaveBoardMembers = async (newMembers) => {
+    try {
+      setUploading(true);
+
+      // Har bir member'ni tekshiramiz va File bo'lsa yuklaymiz
+      const processedMembers = await Promise.all(
+        newMembers.map(async (member) => {
+          if (member.avatar instanceof File) {
+            // Rasmni yuklash
+            const formData = new FormData();
+            formData.append('branch', branchId);
+            formData.append('page', 'about-leadership');
+            formData.append('section_id', 'board');
+            formData.append('image', member.avatar);
+
+            try {
+              const response = await savePageSection(formData, true);
+              // Backend'dan URL olish
+              const imageUrl = response.image || response.url || response.file;
+              return { ...member, avatar: imageUrl };
+            } catch (error) {
+              console.error('Rasm yuklashda xatolik:', error);
+              return { ...member, avatar: '👤' }; // Default avatar
+            }
+          }
+          return member;
+        })
+      );
+
+      // Barcha rasmlar yuklangandan keyin saqlash
+      await handleSaveSection('board', { ...sections.board, members: processedMembers });
+      setUploading(false);
+    } catch (error) {
+      console.error('Board members saqlashda xatolik:', error);
+      setUploading(false);
+      alert('Xatolik yuz berdi. Qaytadan urinib ko\'ring.');
+    }
+  };
 
     console.log(sections, 'seksiya')
   return (
@@ -94,12 +138,25 @@ export default function EditableAboutLeadership() {
               <div className="board-members">
                 <EditableList
                   items={sections.board.members}
-                  onSave={(newMembers) => {
-                    handleSaveSection('board', { ...sections.board, members: newMembers });
-                  }}
+                  onSave={handleSaveBoardMembers}
                   renderItem={(member) => (
                     <div className="board-card glass-card">
-                      <div className="board-avatar">{member.avatar}</div>
+                      <div className="board-avatar">
+                        {typeof member.avatar === 'string' && member.avatar.startsWith('http') ? (
+                            <img
+                                src={member.avatar}
+                                alt={member.name}
+                                style={{
+                                    width: '50%',
+                                    aspectRatio: '1 / 1',
+                                    objectFit: 'cover',
+                                    borderRadius: '50%'
+                                }}
+                            />
+                        ) : (
+                          <div className="board-avatar">{typeof member.avatar === 'string' ? member.avatar : '👤'}</div>
+                        )}
+                      </div>
                       <div className="board-name">{member.name}</div>
                       <div className="board-role">{member.role}</div>
                     </div>
@@ -107,6 +164,11 @@ export default function EditableAboutLeadership() {
                   defaultItem={{ name: '', role: 'Academic Advisor', avatar: '👤' }}
                   itemName="Kengash a'zosi"
                 />
+                {uploading && (
+                  <div style={{ textAlign: 'center', padding: 20, color: 'var(--text-secondary)' }}>
+                    Rasmlar yuklanmoqda...
+                  </div>
+                )}
               </div>
             </div>
           </EditableSection>

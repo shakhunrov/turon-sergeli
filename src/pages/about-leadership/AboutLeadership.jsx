@@ -111,7 +111,17 @@ export default function AboutLeadership() {
             <div className="board-members">
               {sections.board.members.map((m, i) => (
                 <div key={i} className="board-card glass-card">
-                  <div className="board-avatar">👤</div>
+                  <div className="board-avatar">
+                    {typeof m.avatar === 'string' && m.avatar.startsWith('http') ? (
+                      <img
+                        src={m.avatar}
+                        alt={m.name}
+                        style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: '50%' }}
+                      />
+                    ) : (
+                      <span>{typeof m.avatar === 'string' ? m.avatar : '👤'}</span>
+                    )}
+                  </div>
                   <div className="board-name">{m.name}</div>
                   <div className="board-role">{m.role}</div>
                 </div>
